@@ -62,16 +62,6 @@ resource "aws_route_table" "public_rt" {
   }
 }
 
-# NAT EIPs
-resource "aws_eip" "nat_eip" {
-  vpc   = true
-  count = length(aws_subnet.public_subnets)
-
-  tags = {
-    Name = "${var.environment}_nat_eip"
-  }
-}
-
 # NAT Gateway
 resource "aws_nat_gateway" "nat_gw" {
   allocation_id = element(aws_eip.nat_eip.*.id, count.index)
